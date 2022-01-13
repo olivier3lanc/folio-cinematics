@@ -1,0 +1,105 @@
+
+
+@function css_frames_bg_image($url_start, $url_end, $index_start, $index_end) {
+    $last_frame_index: $index_end + 1;
+    $bg_image_value: "";
+
+    @for $i from $index_start to $last_frame_index {
+        $separator: ", ";
+
+        @if $i == $index_start {
+            $separator: "";
+        }
+
+        $bg_image_value: $bg_image_value+$separator+url($url_start + $i + $url_end);
+    }
+
+    @return unquote($bg_image_value);
+}
+
+@function css_frames_bg_position($iteration, $total) {
+    $current_frame_value: "";
+    $bg_size_value: $current_frame_value;
+
+    @for $i from 1 through $total {
+        @if $i==$iteration {
+            $current_frame_value: 50%;
+        }
+
+        @else {
+            $current_frame_value: -1000%;
+        }
+
+        $separator: ",";
+
+        @if $i==1 {
+            $separator: "";
+        }
+
+        $bg_size_value: $bg_size_value+$separator+$current_frame_value;
+    }
+
+    @return unquote($bg_size_value);
+    
+}
+@mixin css-frames($video_frames){
+    
+    // CREATE ANIMATION
+    @each $anim_id, $anim_data in $video_frames {
+        $amount_of_frames: map-get($anim_data, index_end) - map-get($anim_data, index_start) + 1;
+    
+        // CREATE ANIMATION
+        @keyframes #{$anim_id} {
+            @for $i from 1 through $amount_of_frames {
+                #{$i*100/$amount_of_frames + unquote('%')} {
+                    background-position: css_frames_bg_position($i, $amount_of_frames);
+                }
+            }
+        }
+    
+        // CSS DECLARATION OF EACH ANIMATION
+        ##{$anim_id} {
+            position: relative;
+            display: flex;
+            width: 100%;
+            // background-color: red;
+            overflow: hidden;
+            
+            // ASPECT RATIO
+            // Old method
+            aspect-ratio: map-get($anim_data, aspect_ratio);
+            
+            // ASPECT RATIO
+            // Old method
+            // &::before {
+            //     content: "";
+            //     padding-top: unquote(100 / map-get($anim_data, aspect_ratio) + "%");
+            //     float: left;
+            // }
+    
+            // ANIMATION CONTAINER
+            &::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                width: 111.5%;
+                height: 111.5%;
+                transition: none;
+                animation-name: $anim_id;
+                animation-timing-function: step-start;
+                animation-duration: map-get($anim_data, duration);
+                animation-iteration-count: infinite;
+                animation-direction: map-get($anim_data, direction);
+                background-size: 90%;
+                background-repeat: no-repeat;
+                background-image: css_frames_bg_image(map-get($anim_data, url_start),
+                        map-get($anim_data, url_end),
+                        map-get($anim_data, index_start),
+                        map-get($anim_data, index_end));
+            }
+        }
+    }
+}
+

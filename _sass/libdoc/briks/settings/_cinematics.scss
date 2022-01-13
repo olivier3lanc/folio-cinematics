@@ -1,0 +1,1570 @@
+/*
+888888b.           d8b 888               
+888  "88b          Y8P 888               
+888  .88P              888               
+8888888K.  888d888 888 888  888 .d8888b  
+888  "Y88b 888P"   888 888 .88P 88K      
+888    888 888     888 888888K  "Y8888b. 
+888   d88P 888     888 888 "88b      X88 
+8888888P"  888     888 888  888  88888P' 
+*/
+/* 
+    CSS VARIABLES
+    Enable or disable CSS variables of Briks into :root
+    --briks-{{ patternType }}-{{ patternName }}
+*/
+$briks-css-variables-enabled:           true;
+$briks-css-variables-prefix:            'cin-';
+/* 
+    UNIT
+    The default unit used into the entire design system
+*/
+$briks-unit:                            'px';
+/* 
+    COMPONENTS PREFIX
+    The prefix which preceeds every component name
+*/
+$briks-components-prefix:               'c-';
+/* 
+    MODIFIERS PREFIX
+    The prefix which preceeds every modifier name
+*/
+$briks-modifiers-prefix:                'm-';
+/* 
+    UTILITIES PREFIX
+    The prefix which preceeds every utility name
+*/
+$briks-utilities-prefix:                'u-';
+/* 
+    RESPONSIVE PREFIX
+    The prefix which preceeds every screen size name
+*/
+$briks-responsive-prefix:               '--';
+/* 
+    LUMINANCE METHOD
+    Sets the method for automatic color contrast calculation. Involved in briks-smart-contrast function.
+    Default is 3, possible values:
+    1: Weighted Euclidean Distance in 3D RGB Space http://alienryderflex.com/hsp.html
+    2: W3C recommandation https://www.w3.org/TR/AERT/#color-contrast
+    3: Luma sRGB https://en.wikipedia.org/wiki/Rec._709
+*/
+$briks-luminance-method:                3;
+/*
+    LUMINANCE THRESHOLD
+    Define the luminance threshold between light and dark. Float value between 0 and 1.
+    Float value between 0 and 1
+*/
+$briks-luminance-threshold:             0.5;
+
+/*
+.d8888b.           888                           
+d88P  Y88b          888                           
+888    888          888                           
+888         .d88b.  888  .d88b.  888d888 .d8888b  
+888        d88""88b 888 d88""88b 888P"   88K      
+888    888 888  888 888 888  888 888     "Y8888b. 
+Y88b  d88P Y88..88P 888 Y88..88P 888          X88 
+"Y8888P"   "Y88P"  888  "Y88P"  888      88888P' 
+    
+    COLORS
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+*/
+$primary-color:             #cabd3b;
+$briks-colors: (
+    primary:                $primary-color,
+    primary-alt:            briks-smart-contrast(-30, $primary-color),
+    primary-max:            briks-smart-contrast(100, $primary-color),
+    primary-rev:            briks-smart-contrast(-100, $primary-color),
+    'transparent':          transparent
+);
+
+/*
+ .d8888b.                                                           d8b                            
+d88P  Y88b                                                          Y8P                            
+Y88b.                                                                                              
+ "Y888b.    .d8888b 888d888 .d88b.   .d88b.  88888b.       .d8888b  888 88888888  .d88b.  .d8888b  
+    "Y88b. d88P"    888P"  d8P  Y8b d8P  Y8b 888 "88b      88K      888    d88P  d8P  Y8b 88K      
+      "888 888      888    88888888 88888888 888  888      "Y8888b. 888   d88P   88888888 "Y8888b. 
+Y88b  d88P Y88b.    888    Y8b.     Y8b.     888  888           X88 888  d88P    Y8b.          X88 
+ "Y8888P"   "Y8888P 888     "Y8888   "Y8888  888  888       88888P' 888 88888888  "Y8888   88888P' 
+
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    @format [nameOfTheScreenSize]: [number]
+
+    Sets the **break points** of your responsive design system. 
+    Enter any amount of break point names and values to build your own screen sizes. 
+    It is recommended to use semantic names, easy to remenber and to use, 
+    they are used to name your CSS classes utilities. 
+    `0` value defines the smallest screen size.
+
+    // Example
+    $briks-screen-sizes: (
+        mini: 0, // Use '0' to define the smallest screen size
+        medium: 500,
+        maxi: 800
+    );
+    SCREEN SIZES
+*/
+$briks-screen-sizes: (
+    sm: 0,
+    md: 960,
+    xl: 1440
+);
+
+/*
+8888888888                888             
+888                       888             
+888                       888             
+8888888  .d88b.  88888b.  888888 .d8888b  
+888     d88""88b 888 "88b 888    88K      
+888     888  888 888  888 888    "Y8888b. 
+888     Y88..88P 888  888 Y88b.       X88 
+888      "Y88P"  888  888  "Y888  88888P' 
+
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    Fill the fonts assets informations for your design system. Supported font inclusions methods are:
+
+    ### Local or remote
+    // example
+    $briks-fonts: (
+        my-bold: ( // Your own font family name for the design system
+            type:        'local', // Sets the type
+            filename:    'montserrat-bold-webfont', // Name of the font file w/o extension
+            name:        'Montserrat Bold', // The display name used for compilation, can be any string
+            path:        '../fonts/', // Relative path to the file or remote URL
+            legacy:      false, // true means woff2 and woff, false means ttf+woff+svg
+            fallback:    'sans-serif', // Name of a websafe font family used as fallback
+            weight:      600, // Recommended but optional font weight
+        )
+    );
+
+    ### Google font
+    // example
+    $briks-fonts: (
+        my-light: ( // Your own font family name for the design system
+            type:        'google', // Sets the font type
+            name:        'Montserrat', // The Google font name
+            weight:      'Light', // Sets the weight of the font, leave empty '' for default weight
+            fallback:    'sans-serif' // Sets a web safe fallback font. Value can be any web safe font.
+        )
+    );
+
+    ### Websafe
+    // example
+    $briks-fonts: (
+        my-websafe: ( // Your own font family name for the design system
+            type:        'websafe', // Sets the font type
+            name:        'fantasy' // Sets the websafe font family name
+        )
+    );
+
+    ### May Help
+    https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight#common_weight_name_mapping
+    100 	Thin (Hairline)
+    200 	Extra Light (Ultra Light)
+    300 	Light
+    400 	Normal
+    500 	Medium
+    600 	Semi Bold (Demi Bold)
+    700 	Bold
+    800 	Extra Bold (Ultra Bold)
+    900 	Black (Heavy)
+
+    FONTS
+*/
+$briks-fonts: (
+    lead: (
+        type:        'local',
+        filename:    'GillSansNova-Light',
+        name:        'GillSansNova-Light',
+        weight:      100,
+        path:        '../fonts/',
+        fallback:    'sans-serif'
+    ),
+    lead-alt: (
+        type:        'local',
+        name:        'Gotham-Light',
+        filename:    'Gotham-Light',
+        weight:      100,
+        path:        '../fonts/',
+        fallback:    'sans-serif'
+    ),
+);
+
+/*
+    DO NOT EDIT BOOT
+*/
+@import '../engine/boot';
+
+                         
+/*
+8888888888                888                  d8b                   
+888                       888                  Y8P                   
+888                       888                                        
+8888888  .d88b.  88888b.  888888      .d8888b  888 88888888  .d88b.  
+888     d88""88b 888 "88b 888         88K      888    d88P  d8P  Y8b 
+888     888  888 888  888 888         "Y8888b. 888   d88P   88888888 
+888     Y88..88P 888  888 Y88b.            X88 888  d88P    Y8b.     
+888      "Y88P"  888  888  "Y888       88888P' 888 88888888  "Y8888  
+
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    @format [nameOfTheFontSize]: [number]    
+
+    Enter all the font sizes that are used in the design system.
+
+    // example
+    $briks-font-sizes: (
+        xs: 12,
+        sm: 16,
+        md: 20,
+        xl: 40
+    );
+    FONT SIZES
+*/
+$briks-font-sizes: (
+    xxxs:    8,
+    xxs:    12,
+    xs:     15,
+    sm:     18,
+    md:     22,
+    lg:     30,
+    xl:     45,
+    xxl:    80
+);
+
+/*
+88888888888                                                           888               
+    888                                                               888               
+    888                                                               888               
+    888  888  888 88888b.   .d88b.   .d88b.  888d888 8888b.  88888b.  88888b.  888  888 
+    888  888  888 888 "88b d88""88b d88P"88b 888P"      "88b 888 "88b 888 "88b 888  888 
+    888  888  888 888  888 888  888 888  888 888    .d888888 888  888 888  888 888  888 
+    888  Y88b 888 888 d88P Y88..88P Y88b 888 888    888  888 888 d88P 888  888 Y88b 888 
+    888   "Y88888 88888P"   "Y88P"   "Y88888 888    "Y888888 88888P"  888  888  "Y88888 
+              888 888                    888                 888                    888 
+         Y8b d88P 888               Y8b d88P                 888               Y8b d88P 
+          "Y88P"  888                "Y88P"                  888                "Y88P"  
+
+    Font size and font family are mandatory https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties#Font_Properties
+    @format [typographyName]: [font-style optional] [font-variant optional] [font-weight optional] [font-size][/line-height optional] [font-family]
+    
+    An optional way to manage typography on your design system. 
+    Typography is equivalent to [CSS font shorthand](https://developer.mozilla.org/en-US/docs/Web/CSS/font).
+
+    * Use function `my-font-family(yourFontName)` from [$briks-fonts](#Fonts) to apply your own font family.
+    * Use function `my-font-size(yourFontSize)` from [$briks-font-sizes](#Font_sizes) to apply your own font size.
+
+    // example
+    $briks-typography: (
+        bold: my-font-family(my-bold), // Invalid
+        websafe: my-font-size(md) my-font-family(my-websafe), // Valid
+        light: 25px/1.8em my-font-family(my-light), // Valid
+        full: italic small-caps normal my-font-size(xl)/1.8em serif, // Valid
+        opentest: italic small-caps 700 my-font-size(md)/1.8em my-font-family(OpenSansBold) // Valid
+    );
+    TYPOGRAPHY
+*/
+$briks-typography: (
+);
+
+/*
+ .d8888b.                             d8b                            
+d88P  Y88b                            Y8P                            
+Y88b.                                                                
+ "Y888b.   88888b.   8888b.   .d8888b 888 88888b.   .d88b.  .d8888b  
+    "Y88b. 888 "88b     "88b d88P"    888 888 "88b d88P"88b 88K      
+      "888 888  888 .d888888 888      888 888  888 888  888 "Y8888b. 
+Y88b  d88P 888 d88P 888  888 Y88b.    888 888  888 Y88b 888      X88 
+ "Y8888P"  88888P"  "Y888888  "Y8888P 888 888  888  "Y88888  88888P' 
+           888                                          888          
+           888                                     Y8b d88P          
+           888                                      "Y88P"           
+
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    @format [customNameOfTheFontSize]: [number]
+
+    Enter all the spacings that will be used into your project. 
+    Spacings are used in margings, paddings, horizontal and vertical positionings like top, right, bottom, left.
+
+    // Example 
+    $briks-spacings: (
+        xs: 8,
+        sm: 12,
+        md: 18,
+        lg: 26
+    );
+    SPACINGS
+*/
+$briks-spacings: (
+    none:   0,
+    xxs:    5,
+    xs:     10,
+    sm:     20,
+    md:     40,
+    lg:     60,
+    xl:     90,
+    xxl:    150
+);
+
+/*
+888888b.                        888                           
+888  "88b                       888                           
+888  .88P                       888                           
+8888888K.   .d88b.  888d888 .d88888  .d88b.  888d888 .d8888b  
+888  "Y88b d88""88b 888P"  d88" 888 d8P  Y8b 888P"   88K      
+888    888 888  888 888    888  888 88888888 888     "Y8888b. 
+888   d88P Y88..88P 888    Y88b 888 Y8b.     888          X88 
+8888888P"   "Y88P"  888     "Y88888  "Y8888  888      88888P' 
+  
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    @format [customBorderName]: [CSS shorthand]
+
+    * Use function `my-color(yourColorName)` from [$briks-colors](#Colors) to apply your own color.
+    
+    // example
+    $briks-borders: (
+        light: 1px solid my-color(myColorName), // With my-color() function
+        dark: 2px dashed green // Custom color
+    );
+    BORDERS
+*/
+$briks-borders: (
+    none: none,
+    thin-solid-primary: 1px solid my-color(primary),
+    large-solid-primary: 3px solid my-color(primary),
+    thin-solid-primary-max: 1px solid my-color(primary-max),
+    thin-solid-primary-rev: 1px solid my-color(primary-rev),
+    large-solid-primary-max: 3px solid my-color(primary-max),
+    large-solid-primary-rev: 3px solid my-color(primary-rev),
+);
+
+/*
+888888b.                        888                                            888 d8b                   
+888  "88b                       888                                            888 Y8P                   
+888  .88P                       888                                            888                       
+8888888K.   .d88b.  888d888 .d88888  .d88b.  888d888      888d888 8888b.   .d88888 888 888  888 .d8888b  
+888  "Y88b d88""88b 888P"  d88" 888 d8P  Y8b 888P"        888P"      "88b d88" 888 888 888  888 88K      
+888    888 888  888 888    888  888 88888888 888          888    .d888888 888  888 888 888  888 "Y8888b. 
+888   d88P Y88..88P 888    Y88b 888 Y8b.     888          888    888  888 Y88b 888 888 Y88b 888      X88 
+8888888P"   "Y88P"  888     "Y88888  "Y8888  888          888    "Y888888  "Y88888 888  "Y88888  88888P' 
+
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    @format [customBorderRadiusName]: [number]
+
+    Enter your border radius for your design system.
+
+    // example
+    $briks-border-radius: (
+        min: 2,
+        max: 30
+    );
+    BORDER RADIUS
+*/
+$briks-border-radius: (
+    min: 10,
+    max: 128,
+);
+
+
+/*
+.d8888b.  888                    888                                 
+d88P  Y88b 888                    888                                 
+Y88b.      888                    888                                 
+ "Y888b.   88888b.   8888b.   .d88888  .d88b.  888  888  888 .d8888b  
+    "Y88b. 888 "88b     "88b d88" 888 d88""88b 888  888  888 88K      
+      "888 888  888 .d888888 888  888 888  888 888  888  888 "Y8888b. 
+Y88b  d88P 888  888 888  888 Y88b 888 Y88..88P Y88b 888 d88P      X88 
+ "Y8888P"  888  888 "Y888888  "Y88888  "Y88P"   "Y8888888P"   88888P' 
+
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    @format [customBoxShadowName]: [CSS shorthand]
+
+    Enter your [box shadows](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow) for your design system.
+
+    * Use function `my-color(yourColorName)` from [$briks-colors](#Colors) to apply your own color.
+    
+    // example
+    $briks-shadows: (
+        light: 0px 0px 10px 0px my-color(yourColorName), // With my-color() function
+        strong: 0px 2px 12px 0px rgba(black, 0.6) // Custom color
+    );
+    SHADOWS
+*/
+$briks-shadows: ();
+
+/*
+888888b.                     888                                                      888          
+888  "88b                    888                                                      888          
+888  .88P                    888                                                      888          
+8888888K.   8888b.   .d8888b 888  888  .d88b.  888d888 .d88b.  888  888 88888b.   .d88888 .d8888b  
+888  "Y88b     "88b d88P"    888 .88P d88P"88b 888P"  d88""88b 888  888 888 "88b d88" 888 88K      
+888    888 .d888888 888      888888K  888  888 888    888  888 888  888 888  888 888  888 "Y8888b. 
+888   d88P 888  888 Y88b.    888 "88b Y88b 888 888    Y88..88P Y88b 888 888  888 Y88b 888      X88 
+8888888P"  "Y888888  "Y8888P 888  888  "Y88888 888     "Y88P"   "Y88888 888  888  "Y88888  88888P' 
+                                           888                                                     
+                                      Y8b d88P                                                     
+                                       "Y88P"                                                      
+
+    @type SASS map https://sass-lang.com/documentation/file.SASS_REFERENCE.html#maps
+    @format [customBackgroundName]: [CSS shorthand]
+
+    Enter your [background](https://developer.mozilla.org/en-US/docs/Web/CSS/background) for your design system.
+
+    * Use function `my-color(yourColorName)` from $briks-colors to apply your own color.
+    * Use function `my-font-size(yourFontSizeName)` from $briks-font-sizes to apply your own font size.
+    * Use function `my-spacing(your SpacingName)` from $briks-spacings to apply your own spacing.
+    
+    // example
+    $briks-backgrounds: (
+        gradient-1-vertical: linear-gradient(0deg, rgba(#000, 0) 0%, my-color(neutral-dark-4) 100%),
+        select-light: right my-spacing(sm) top 50% / my-font-size(sm2) no-repeat my-color(neutral-light-max) url('../img/icons/chevron-down.svg'),
+        select-light-borderless: right 0% top 50% / my-font-size(sm2) no-repeat my-color(neutral-light-max) url('../img/icons/chevron-down.svg')
+    );
+    BACKGROUNDS
+*/
+$briks-backgrounds: (
+    // search: 'right 20px center / 16px no-repeat url(data:image/svg+xml;base64,PHN2ZwogIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB3aWR0aD0iMjQiCiAgaGVpZ2h0PSIyNCIKICB2aWV3Qm94PSIwIDAgMjQgMjQiCiAgZmlsbD0ibm9uZSIKICBzdHJva2U9ImN1cnJlbnRDb2xvciIKICBzdHJva2Utd2lkdGg9IjIiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8Y2lyY2xlIGN4PSIxMSIgY3k9IjExIiByPSI4IiAvPgogIDxsaW5lIHgxPSIyMSIgeTE9IjIxIiB4Mj0iMTYuNjUiIHkyPSIxNi42NSIgLz4KPC9zdmc+Cg==)',
+    // loading: 'center no-repeat 'my-color(primary-edge) 'url(data:image/svg+xml;base64,PHN2ZwogIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB3aWR0aD0iMjQiCiAgaGVpZ2h0PSIyNCIKICB2aWV3Qm94PSIwIDAgMjQgMjQiCiAgZmlsbD0ibm9uZSIKICBzdHJva2U9ImN1cnJlbnRDb2xvciIKICBzdHJva2Utd2lkdGg9IjIiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgLz4KICA8cG9seWxpbmUgcG9pbnRzPSIxMiA2IDEyIDEyIDE2IDE0IiAvPgo8L3N2Zz4K)',
+    stripes: 'url(../img/stripe.svg)',
+    vignetting: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%),
+    gradient-vertical: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%),
+    gradient-vertical-rev: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%),
+    sic-mundus: 'center / contain no-repeat transparent url(../img/sic-mundus.svg)',
+    // stripes: 'repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAFUlEQVQImWNgQAKrVq36TyqHgYEBAJS9C/UfuuB+AAAAAElFTkSuQmCC)',
+    // select: 'right 0px top 50% / 60px 10% no-repeat url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxIiBoZWlnaHQ9IjMyIiB2aWV3Qm94PSIwIDAgNTEgMzIiPjx0aXRsZT5jaGV2cm9uLWRvd248L3RpdGxlPjxwYXRoIGQ9Ik00NS4yMjcgMGw1Ljk3MyA2LjA1NC0yNS42IDI1Ljk0Ni0yNS42LTI1Ljk0NiA1Ljk3My02LjA1NCAxOS42MjcgMTkuODkyeiI+PC9wYXRoPjwvc3ZnPg==)',
+    // checkbox: '#333 center / 60% 60% no-repeat url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxMCIgd2lkdGg9IjExIiBoZWlnaHQ9IjEwIj48c3R5bGU+dHNwYW4geyB3aGl0ZS1zcGFjZTpwcmUgfS5zaHAwIHsgZmlsbDogbm9uZTtzdHJva2U6ICNmZmZmZmY7c3Ryb2tlLXdpZHRoOiAyIH0gPC9zdHlsZT48cGF0aCBpZD0iTGF5ZXIiIGNsYXNzPSJzaHAwIiBkPSJNMSw1bDMuNSwzbDUuNSwtNyIgLz48L3N2Zz4=)',
+    // radio: 'radial-gradient(circle, #333 0%, #333 36%, transparent 36%, transparent 100%)',
+    // damier-soft: 'repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAI0lEQVR4AWP4//+/FD585swZvHh4GDBqACEFBCwYHgaMGgAA3mTKn52zzk8AAAAASUVORK5CYII=)',
+    // damier-hard: 'repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAHElEQVR4AWP4jwOcwQFoo2FUAy4JXAbRRMOoBgCE0rCfubvZNQAAAABJRU5ErkJggg==)',
+    // damier-white-soft: 'repeat white url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAI0lEQVR4AWP4//+/FD585swZvHh4GDBqACEFBCwYHgaMGgAA3mTKn52zzk8AAAAASUVORK5CYII=)',
+    // damier-white-hard: 'repeat white url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAHElEQVR4AWP4jwOcwQFoo2FUAy4JXAbRRMOoBgCE0rCfubvZNQAAAABJRU5ErkJggg==)',
+);
+/*
+888     888 888    d8b 888 d8b 888    d8b                                                          
+888     888 888    Y8P 888 Y8P 888    Y8P                                                          
+888     888 888        888     888                                                                 
+888     888 888888 888 888 888 888888 888  .d88b.  .d8888b                                         
+888     888 888    888 888 888 888    888 d8P  Y8b 88K                                             
+888     888 888    888 888 888 888    888 88888888 "Y8888b.                                        
+Y88b. .d88P Y88b.  888 888 888 Y88b.  888 Y8b.          X88                                        
+ "Y88888P"   "Y888 888 888 888  "Y888 888  "Y8888   88888P'                                        
+
+*/
+$briks-utilities: (
+    animation: (
+        enabled: true,
+        prefix: 'anim-',
+        names-and-values: (
+            rotate: 3s ease-in-out 0s infinite rotate,
+            left-to-right: 3s linear 0s infinite alternate left_to_right,
+            bottom-to-top: 4s linear 0s infinite alternate bottom_to_top,
+            bottom-to-top-transform: 1s ease-in-out 0s infinite alternate bottom_to_top_transform,
+            fade-in: 0.7s ease-in-out 0s 1 fade,
+            click: 0.7s ease-out 0s 1 forwards click
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    background: (
+        enabled: true,
+        prefix: 'bg-',
+        names-and-values: $briks-backgrounds,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    background-size: (
+        enabled: true,
+        prefix: 'bsize-',
+        names-and-values: (
+            contain: contain, // {{ name }}: {{ value }}
+            cover: cover, // {{ name }}: {{ value }}
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    background-position: (
+        enabled: true,
+        prefix: 'bpos-',
+        names-and-values: (
+            center: center
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    background-repeat: (
+        enabled: true,
+        prefix: 'brep-',
+        names-and-values: (
+            no-repeat: no-repeat
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-radius: (
+        enabled: true,
+        prefix: 'brad-',
+        names-and-values: $briks-border-radius,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-top-left-radius: (
+        enabled: true,
+        prefix: 'bradtl-',
+        names-and-values: $briks-border-radius,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-top-right-radius: (
+        enabled: true,
+        prefix: 'bradtr-',
+        names-and-values: $briks-border-radius,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-bottom-right-radius: (
+        enabled: true,
+        prefix: 'bradbr-',
+        names-and-values: $briks-border-radius,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-bottom-left-radius: (
+        enabled: true,
+        prefix: 'bradbl-',
+        names-and-values: $briks-border-radius,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border: (
+        enabled: true,
+        prefix: 'b-',
+        names-and-values: $briks-borders,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-top: (
+        enabled: true,
+        prefix: 'bt-',
+        names-and-values: $briks-borders,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-right: (
+        enabled: true,
+        prefix: 'br-',
+        names-and-values: $briks-borders,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-bottom: (
+        enabled: true,
+        prefix: 'bb-',
+        names-and-values: $briks-borders,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    border-left: (
+        enabled: true,
+        prefix: 'bl-',
+        names-and-values: $briks-borders,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    color: (
+        enabled: true,
+        prefix: 'c-',
+        names-and-values: $briks-colors,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    background-color: (
+        enabled: true,
+        prefix: 'bc-',
+        names-and-values: $briks-colors,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    cursor: (
+        enabled: true,
+        prefix: 'cur-',
+        names-and-values: (
+            'pointer': pointer
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    display: (
+        enabled: true,
+        prefix: '',
+        names-and-values: (
+            'none': none,
+            'inline': inline,
+            'inline-block': inline-block,
+            'block': block
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    font-family: (
+        enabled: true,
+        prefix: 'ff-',
+        names-and-values: $briks-fonts,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    font-size: (
+        enabled: true,
+        prefix: 'fs-',
+        names-and-values: $briks-font-sizes,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    font-weight: (
+        enabled: true,
+        prefix: 'fw-',
+        names-and-values: (
+            100: 100
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    height: (
+        enabled: true,
+        prefix: 'h-',
+        names-and-values: (
+            '100': 100%,
+            'auto': auto,
+            '100vh': 100vh,
+            '200vh': 200vh,
+            '80vh': 80vh,
+            '50vh': 50vh,
+            'smallbar': 12px
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    letter-spacing: (
+        enabled: true,
+        prefix: 'lsp-',
+        names-and-values: (
+            'none': 0,
+            'short': -0.01em,
+            'title': -0.04em,
+            'large': 0.1em,
+            'xlarge': 0.25em,
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    line-height: (
+        enabled: true,
+        prefix: 'lh-',
+        names-and-values: (
+            '0': 0,
+            '1': 1em,
+            'base': 1.3em,
+            'smooth': 1.7em,
+            'inherit': inherit,
+            'initial': initial
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    list-style: (
+        enabled: true,
+        prefix: 'ls-',
+        names-and-values: (
+            'none': none
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    margin: (
+        enabled: true,
+        prefix: 'm-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (
+            'auto': auto
+        ),
+        responsive: true
+    ),
+    margin-top: (
+        enabled: true,
+        prefix: 'mt-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    margin-right: (
+        enabled: true,
+        prefix: 'mr-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    margin-bottom: (
+        enabled: true,
+        prefix: 'mb-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    margin-left: (
+        enabled: true,
+        prefix: 'ml-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    min-width: (
+        enabled: true,
+        prefix: 'minw-',
+        names-and-values: (
+            100vw: 100vw
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    min-height: (
+        enabled: true,
+        prefix: 'minh-',
+        names-and-values: (
+            100vh: 100vh
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    opacity: (
+        enabled: true,
+        prefix: '',
+        names-and-values: (
+            'faded': 0.5,
+            'translucid': 0.9,
+            'transparent': 0
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    overflow: (
+        enabled: true,
+        prefix: 'o-',
+        names-and-values: (
+            'auto': auto,
+            'visible': visible,
+            'hidden': hidden
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    padding: (
+        enabled: true,
+        prefix: 'p-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (
+            de: my-spacing(xs) 13px
+        ),
+        responsive: true
+    ),
+    padding-top: (
+        enabled: true,
+        prefix: 'pt-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    padding-right: (
+        enabled: true,
+        prefix: 'pr-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    padding-bottom: (
+        enabled: true,
+        prefix: 'pb-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    padding-left: (
+        enabled: true,
+        prefix: 'pl-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    pointer-events: (
+        enabled: true,
+        prefix: 'pe-',
+        names-and-values: (
+            'auto': auto,
+            'none': none
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    position: (
+        enabled: true,
+        prefix: '',
+        names-and-values: (
+            'absolute': absolute,
+            'fixed': fixed,
+            'sticky': sticky,
+            'relative': relative,
+            'inherit': inherit
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    top: (
+        enabled: true,
+        prefix: 'top-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (
+            '0': 0%,
+            '50': 50%,
+            '100': 100%
+        ),
+        responsive: true
+    ),
+    right: (
+        enabled: true,
+        prefix: 'right-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (
+            '0': 0%,
+            '50': 50%,
+            '100': 100%
+        ),
+        responsive: true
+    ),
+    bottom: (
+        enabled: true,
+        prefix: 'bottom-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (
+            '0': 0%,
+            '50': 50%,
+            '100': 100%
+        ),
+        responsive: true
+    ),
+    left: (
+        enabled: true,
+        prefix: 'left-',
+        names-and-values: $briks-spacings,
+        additional-names-and-values: (
+            '0': 0%,
+            '50': 50%,
+            '100': 100%
+        ),
+        responsive: true
+    ),
+    text-align: (
+        enabled: true,
+        prefix: 'ta-',
+        names-and-values: (
+            'left': left,
+            'center': center,
+            'right': right,
+            'justify': justify,
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    box-shadow: (
+        enabled: false,
+        prefix: 'bs-',
+        names-and-values: $briks-shadows,
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    text-decoration: (
+        enabled: true,
+        prefix: 'td-',
+        names-and-values: (
+            'none': none
+        ),
+        additional-names-and-values: (),
+        responsive: true
+    ),
+    text-transform: (
+        enabled: true,
+        prefix: 'tt-',
+        names-and-values: (
+            'uppercase': uppercase
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    transition: (
+        enabled: true,
+        prefix: 'transition-',
+        names-and-values: (
+            'none': none,
+            'opacity': opacity 500ms
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    vertical-align: (
+        enabled: true,
+        prefix: 'va-',
+        names-and-values: (
+            'top': top,
+            'middle': middle,
+            'bottom': bottom
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    white-space: (
+        enabled: true,
+        prefix: 'ws-',
+        names-and-values: (
+            nowrap: nowrap
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    width: (
+        enabled: true,
+        prefix: 'w-',
+        names-and-values: (
+            'auto': auto,
+            '100': 100%,
+            'smallbar': 12px,
+            '60vw': 60vw
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+    z-index: (
+        enabled: true,
+        prefix: 'z-',
+        names-and-values: (
+            '100':    100,
+            '10':     10,
+            '11':     11,
+            '12':     12,
+            '13':     13,
+            '1':      1,
+            '0':      0,
+            '-1':   -1
+        ),
+        additional-names-and-values: (),
+        responsive: false
+    ),
+);
+
+/*
+.d8888b.                                                                      888             
+d88P  Y88b                                                                     888             
+888    888                                                                     888             
+888         .d88b.  88888b.d88b.  88888b.   .d88b.  88888b.   .d88b.  88888b.  888888 .d8888b  
+888        d88""88b 888 "888 "88b 888 "88b d88""88b 888 "88b d8P  Y8b 888 "88b 888    88K      
+888    888 888  888 888  888  888 888  888 888  888 888  888 88888888 888  888 888    "Y8888b. 
+Y88b  d88P Y88..88P 888  888  888 888 d88P Y88..88P 888  888 Y8b.     888  888 Y88b.       X88 
+ "Y8888P"   "Y88P"  888  888  888 88888P"   "Y88P"  888  888  "Y8888  888  888  "Y888  88888P' 
+                                  888                                                          
+                                  888                                                          
+                                  888                                                          
+
+*/
+
+/*
+    GENERIC COMPONENTS
+    ---
+    Generic components are compoments with muliple properties but no inheritance nor states
+    Structure:
+    $briks-components-generic: (
+        name_of_the_component: (
+            enabled: true,
+            responsive: true,
+            defaults: (
+            ),
+            modifiers: (
+            )
+        )
+    );
+*/
+$briks-components-generic: (
+    background: (
+        enabled: true,
+        responsive: false,
+        defaults: (),
+        modifiers: (
+            clip-text: (
+                -webkit-background-clip: text,
+                -webkit-text-fill-color: transparent,
+                background-clip: text
+            ),
+            gradient-vertical: (
+                background-image: linear-gradient(0deg, rgb(255,255,255) 0%, rgb(0,0,0) 100%)
+            ),
+        )
+    ),
+    shape: (
+        enabled: true,
+        responsive: false,
+        defaults: (
+            display: inline-block
+        ),
+        modifiers: (
+            dot: (
+                width: 1em,
+                height: 1em,
+                border-radius: my-border-radius(max),
+                background-color: my-color(primary-max)
+            ),
+            mouse: (
+                width: 0.67em,
+                height: 1em,
+                border: my-border(thin-solid-primary-max),
+                border-radius: my-border-radius(max),
+                position: relative,
+                pseudo-elements: (
+                    before: (
+                        content: '',
+                        display: block,
+                        position: absolute,
+                        width: 0.1em,
+                        height: 0.1em,
+                        top: 0.2em,
+                        left: 50%,
+                        animation: 0.7s linear 0s infinite alternate mousewheel,
+                        transform: translateX(-50%) translateY(-50%),
+                        background-color: my-color(primary-max),
+                        border-radius: my-border-radius(max)
+                    )
+                )
+            ),
+            orientation-landscape: (
+                width: 0.67em,
+                height: 1em,
+                border: my-border(thin-solid-primary-max),
+                position: relative,
+                animation: 2s ease-in-out 0s infinite rotate_90cw,
+                pseudo-elements: (
+                    before: (
+                        content: '',
+                        display: block,
+                        position: absolute,
+                        width: 0.1em,
+                        height: 0.1em,
+                        bottom: 0.1em,
+                        left: calc(50% - 0.05em),
+                        background-color: my-color(primary-max)
+                    )
+                )
+            ),
+            chevron-top: (
+                width: 1em,
+                height: 1em,
+                border-top: my-border(thin-solid-primary),
+                border-right: my-border(thin-solid-primary),
+                transform: rotate(-45deg)
+            ),
+            chevron-right: (
+                width: 1em,
+                height: 1em,
+                border-top: my-border(thin-solid-primary),
+                border-right: my-border(thin-solid-primary),
+                transform: rotate(45deg)
+            ),
+            chevron-down: (
+                width: 1em,
+                height: 1em,
+                border-right: my-border(thin-solid-primary),
+                border-bottom: my-border(thin-solid-primary),
+                transform: rotate(45deg)
+            ),
+            chevron-left: (
+                width: 1em,
+                height: 1em,
+                border-left: my-border(thin-solid-primary),
+                border-bottom: my-border(thin-solid-primary),
+                transform: rotate(45deg)
+            ),
+            play: (
+                width: 1em,
+                height: 1em,
+                border-left: my-border(thin-solid-primary),
+                position: relative,
+                pseudo-elements: (
+                    before: (
+                        content: '',
+                        display: block,
+                        position: absolute,
+                        width: 100%,
+                        top: 0%,
+                        left: 0%,
+                        border-top: my-border(thin-solid-primary),
+                        transform-origin: top left,
+                        transform: rotate(30deg)
+                    ),
+                    after: (
+                        content: '',
+                        display: block,
+                        position: absolute,
+                        width: 100%,
+                        bottom: 0%,
+                        left: 0%,
+                        border-top: my-border(thin-solid-primary),
+                        transform-origin: top left,
+                        transform: rotate(-30deg)
+                    )
+                )
+            ),
+            pause: (
+                display: inline-flex,
+                justify-content: center,
+                width: 1em,
+                height: 1em,
+                pseudo-elements: (
+                    before: (
+                        content: '',
+                        border-left: my-border(thin-solid-primary),
+                        width: 20%,
+                    ),
+                    after: (
+                        content: '',
+                        border-right: my-border(thin-solid-primary),
+                        width: 20%,
+                    )
+                )
+            ),
+        )
+    ),
+    container: (
+        enabled: true,
+        responsive: true,
+        defaults: (
+            margin: auto,
+            width: 100%
+        ),
+        modifiers: (
+            w-xs: (
+                max-width: 400px
+            ),
+            w-sm: (
+                max-width: 600px
+            ),
+            w-md: (
+                max-width: 800px
+            )
+        )
+    ),
+    effect: (
+        enabled: true,
+        responsive: false,
+        defaults: (),
+        modifiers: (
+            span-180-core-x: (
+                perspective: 4em,
+                pseudo-classes: (
+                    hover: (
+                        selector: '>span',
+                        transform: rotateX(180deg)
+                    )
+                )
+            ),
+            span-180-core-y: (
+                perspective: 4em,
+                pseudo-classes: (
+                    hover: (
+                        selector: '>span',
+                        transform: rotateY(180deg)
+                    )
+                )
+            ),
+            span-180-rotate: (
+                selector: '>span',
+                pointer-events: none,
+                transition: (transform 1s),
+            )
+        )
+    ),
+    btn: (
+        enabled: true,
+        responsive: false,
+        defaults: (
+            position: relative,
+            cursor: pointer,
+            box-sizing: border-box,
+            transition: all 300ms,
+            display: inline-flex,
+            justify-content: center,
+            align-items: center,
+            line-height: 1.1em,
+            text-decoration: none,
+            vertical-align: middle,
+            padding: my-spacing(sm, md),
+            background-color: transparent,
+            color: my-color(primary),
+            border: none,
+            font-family: my-font-family(lead-alt),
+            font-size: my-font-size(sm),
+            text-transform: uppercase,
+            // animation: 2s ease-in-out 0s 1 fade
+        ),
+        modifiers: (
+            'transparent': (
+                background-image: none
+            )
+        )
+    ),
+    grid: (
+        enabled: true,
+        responsive: true,
+        defaults: (
+            display: flex,
+            flex-wrap: wrap,
+            margin: 0,
+            padding: 0,
+        ),
+        modifiers: (
+            column: (
+                flex-flow: column
+            ),
+            center: (
+                justify-content: center
+            ),
+            space-between: (
+                justify-content: space-between
+            ),
+            left: (
+                justify-content: flex-start
+            ),
+            right: (
+                justify-content: flex-end
+            ),
+            baseline: (
+                align-items: baseline
+            ),
+            middle: (
+                align-items: center
+            ),
+            top: (
+                align-items: flex-start
+            ),
+            bottom: (
+                align-items: flex-end
+            ),
+            nowrap: (
+                flex-wrap: nowrap
+            )
+        )
+    ),
+    spacing: (
+        enabled: true,
+        responsive: true,
+        defaults: (),
+        modifiers: (
+            maxw-600: (
+                max-width: 600px
+            ),
+            maxw-300: (
+                max-width: 300px
+            ),
+            w-12: (
+                width: 100%
+            ),
+            w-11: (
+                width: 91.6666%
+            ),
+            w-10: (
+                width: 83.3333%
+            ),
+            w-9: (
+                width: 75%
+            ),
+            w-8: (
+                width: 66.6666%
+            ),
+            w-7: (
+                width: 58.3333%
+            ),
+            w-6: (
+                width: 50%
+            ),
+            w-5: (
+                width: 41.6666%
+            ),
+            w-4: (
+                width: 33.3333%
+            ),
+            w-3: (
+                width: 25%
+            ),
+            w-2: (
+                width: 16.6666%
+            ),
+            w-1: (
+                width: 8.3333%
+            ),
+        )
+    ),
+    ar: (
+        enabled: true,
+        responsive: false,
+        defaults: (),
+        modifiers: (
+            square: (
+                pseudo-elements: (
+                    before: (
+                        content: '',
+                        float: left,
+                        pointer-events: none,
+                        padding-top: 100%,
+                    )
+                )
+            )
+        )
+    ),
+    position: (
+        enabled: true,
+        responsive: true,
+        defaults: (
+        ),
+        modifiers: (
+            absolute: (
+                position: absolute
+            ),
+            fixed: (
+                position: fixed
+            ),
+            sticky: (
+                position: sticky
+            ),
+            relative: (
+                position: relative
+            ),
+            top-left: (
+                top: 0%,
+                left: 0%
+            ),
+            top-center: (
+                top: 0%,
+                left: 50%
+            ),
+            top-right: (
+                top: 0%,
+                left: 100%
+            ),
+            middle-left: (
+                top: 50%,
+                left: 0%
+            ),
+            middle-center: (
+                top: 50%,
+                left: 50%
+            ),
+            middle-right: (
+                top: 50%,
+                left: 100%
+            ),
+            bottom-left: (
+                top: 100%,
+                left: 0%
+            ),
+            bottom-center: (
+                top: 100%,
+                left: 50%
+            ),
+            bottom-right: (
+                top: 100%,
+                left: 100%
+            ),
+            top-0: (
+                top: 0%
+            ),
+            top-25: (
+                top: 25%
+            ),
+            top-50: (
+                top: 50%
+            ),
+            top-75: (
+                top: 75%
+            ),
+            top-100: (
+                top: 100%
+            ),
+            right-0: (
+                right: 0%
+            ),
+            right-25: (
+                right: 25%
+            ),
+            right-50: (
+                right: 50%
+            ),
+            right-75: (
+                right: 75%
+            ),
+            right-100: (
+                right: 100%
+            ),
+            bottom-0: (
+                bottom: 0%
+            ),
+            bottom-25: (
+                bottom: 25%
+            ),
+            bottom-50: (
+                bottom: 50%
+            ),
+            bottom-75: (
+                bottom: 75%
+            ),
+            bottom-100: (
+                bottom: 100%
+            ),
+            left-0: (
+                left: 0%
+            ),
+            left-25: (
+                left: 25%
+            ),
+            left-33: (
+                left: 33%
+            ),
+            left-50: (
+                left: 50%
+            ),
+            left-66: (
+                left: 66%
+            ),
+            left-75: (
+                left: 75%
+            ),
+            left-100: (
+                left: 100%
+            ),
+            top-none: (
+                top: my-spacing(none)
+            ),
+            top-xxs: (
+                top: my-spacing(xxs)
+            ),
+            top-xs: (
+                top: my-spacing(xs)
+            ),
+            top-sm: (
+                top: my-spacing(sm)
+            ),
+            top-md: (
+                top: my-spacing(md)
+            ),
+            top-lg: (
+                top: my-spacing(lg)
+            ),
+            top-xl: (
+                top: my-spacing(xl)
+            ),
+            top-xxl: (
+                top: my-spacing(xxl)
+            ),
+            right-none: (
+                right: my-spacing(none)
+            ),
+            right-xxs: (
+                right: my-spacing(xxs)
+            ),
+            right-xs: (
+                right: my-spacing(xs)
+            ),
+            right-sm: (
+                right: my-spacing(sm)
+            ),
+            right-md: (
+                right: my-spacing(md)
+            ),
+            right-lg: (
+                right: my-spacing(lg)
+            ),
+            right-xl: (
+                right: my-spacing(xl)
+            ),
+            right-xxl: (
+                right: my-spacing(xxl)
+            ),
+            bottom-none: (
+                bottom: my-spacing(none)
+            ),
+            bottom-xxs: (
+                bottom: my-spacing(xxs)
+            ),
+            bottom-xs: (
+                bottom: my-spacing(xs)
+            ),
+            bottom-sm: (
+                bottom: my-spacing(sm)
+            ),
+            bottom-md: (
+                bottom: my-spacing(md)
+            ),
+            bottom-lg: (
+                bottom: my-spacing(lg)
+            ),
+            bottom-xl: (
+                bottom: my-spacing(xl)
+            ),
+            bottom-xxl: (
+                bottom: my-spacing(xxl)
+            ),
+            left-none: (
+                left: my-spacing(none)
+            ),
+            left-xxs: (
+                left: my-spacing(xxs)
+            ),
+            left-xs: (
+                left: my-spacing(xs)
+            ),
+            left-sm: (
+                left: my-spacing(sm)
+            ),
+            left-md: (
+                left: my-spacing(md)
+            ),
+            left-lg: (
+                left: my-spacing(lg)
+            ),
+            left-xl: (
+                left: my-spacing(xl)
+            ),
+            left-xxl: (
+                left: my-spacing(xxl)
+            ),
+            anchor-top-left: (
+                transform: translateX(0%) translateY(0%)
+            ),
+            anchor-top-center: (
+                transform: translateX(-50%) translateY(0%)
+            ),
+            anchor-top-right: (
+                transform: translateX(-100%) translateY(0%)
+            ),
+            anchor-middle-left: (
+                transform: translateX(0%) translateY(-50%)
+            ),
+            anchor-middle-center: (
+                transform: translateX(-50%) translateY(-50%)
+            ),
+            anchor-middle-right: (
+                transform: translateX(-100%) translateY(-50%)
+            ),
+            anchor-bottom-left: (
+                transform: translateX(0%) translateY(-100%)
+            ),
+            anchor-bottom-center: (
+                transform: translateX(-50%) translateY(-100%)
+            ),
+            anchor-bottom-right: (
+                transform: translateX(-100%) translateY(-100%)
+            )
+        )
+    ),
+);

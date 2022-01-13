@@ -1,0 +1,16 @@
+---
+---
+@import 'third-parties/css-frames';
+// PURE CSS VIDEO FRAMES
+$video_frames: (
+    breaking_bad_opening_credits_b: (
+        index_start: 1,
+        index_end: 138,
+        aspect_ratio: 1.7777,
+        duration: 9s,
+        direction: alternate,
+        url_start: '../img/breaking_bad_opening_credits_b/breaking_bad_opening_credits_b_',
+        url_end: '.webp'
+    )
+);
+@include css-frames($video_frames);

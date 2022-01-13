@@ -1,0 +1,27 @@
+body {
+    opacity: 1;
+}
+
+#app_screen_height {
+    height: 0 !important;
+}
+
+#app_audio_player {
+    display: none;
+}
+
+#app_play_pause {
+    display: none;
+}
+
+#app_loader {
+    opacity: 0;
+}
+
+#app_fullscreen {
+    display: none;
+}
+
+[scroll-btween="app_scene"] {
+    opacity: 1 !important;
+}

@@ -1,0 +1,17 @@
+---
+---
+
+@import 'third-parties/css-frames';
+// PURE CSS VIDEO FRAMES
+$video_frames: (
+    hp_diagon_alley: (
+        index_start: 1,
+        index_end: 124,
+        aspect_ratio: 2.4,
+        duration: 7s,
+        direction: alternate,
+        url_start: '../img/hp_diagon_alley/hp_diagon_alley_',
+        url_end: '.webp'
+    )
+);
+@include css-frames($video_frames);

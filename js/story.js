@@ -1,6 +1,12 @@
 const story = {
     scenes: {
-        'breaking_bad_opening_credits_b': {
+        'hp_diagon_alley': { layout: 'first'},
+        'hp_dementor_opening_door': { layout: 'first'},
+        'hp_clock_clouds': { layout: 'first'},
+        'mad_max_fury_road_opening_scene_a': {
+            layout: 'first'
+        },
+        'harry_potter_hogwarts_dementors_a': {
             layout: 'first'
         },
         'about': {
@@ -111,6 +117,7 @@ const story = {
                 <div class="c-grid c-position m-fixed m-middle-center m-anchor-middle-center">
                     <div id="${id}" class="u-minh-100vh u-minw-100vw"></div>
                 </div>
+                <div class="c-position m-fixed m-top-0 u-w-100 u-h-100vh u-pe-none u-bg-stripes"></div>
             `
         }
     },

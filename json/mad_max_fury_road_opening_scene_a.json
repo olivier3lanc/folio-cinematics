@@ -1,0 +1,6 @@
+---
+---
+[
+{% for i in (1..63) %}{ "url": "{{site.url}}{{site.baseurl}}/img/mad_max_fury_road_opening_scene_a/mad_max_fury_road_opening_scene_a_{{i}}.webp" }{% if forloop.last == false %},{% endif %}
+{% endfor %}
+]

@@ -1,0 +1,15 @@
+
+@import 'third-parties/css-frames';
+// PURE CSS VIDEO FRAMES
+$video_frames: (
+    hp_clock_clouds: (
+        index_start: 1,
+        index_end: 124,
+        aspect_ratio: 2.43611,
+        duration: 6s,
+        direction: alternate,
+        url_start: '/cinematics-resources/hp_clock_clouds/hp_clock_clouds_',
+        url_end: '.webp'
+    )
+);
+@include css-frames($video_frames);

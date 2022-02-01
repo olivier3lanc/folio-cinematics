@@ -1,5 +1,6 @@
 let app = {
     defaults: {
+        el_player: document.getElementById('app_player'),
         el_audio_player: document.getElementById('app_audio_player'),
         el_play_pause_button: document.getElementById('app_play_pause'),
         el_audio_previous_button: document.getElementById('app_audio_previous'),
@@ -14,54 +15,54 @@ let app = {
         el_effect_click: document.getElementById('app_effect_click'),
         isFullscreen: false,
         songs: {
-            'audio/apparat-goodbye.mp3': {
-                artist: 'Apparat',
-                title: 'Goodbye'
-            },
-            'audio/teho-teardo-blixa-bargeld-a-quiet-life.mp3': {
-                artist: 'Teho Teardo & Blixa Bargeld',
-                title: 'A Quiet Life'
-            },
-            'audio/fever-ray-keep-the-streets-empty-for-me.mp3': {
-                artist: 'Fever Ray',
-                title: 'Keep the Streets Empty for Me'
-            },
-            'audio/apparat-joel.mp3': {
-                artist: 'Apparat',
-                title: 'Joel'
-            },
-            'audio/agnes-obel-familiar.mp3': {
-                artist: 'Agnes Obel',
-                title: 'Familiar'
-            },
-            'audio/chris-avantgarde-feat-red-rosamond-inside.mp3': {
-                artist: 'Chris Avantgarde feat. Red Rosamond',
-                title: 'Inside'
-            },
-            'audio/may-the-muse-bad-kingdom.mp3': {
-                artist: 'May The Muse and Robot Koch',
-                title: 'Bad Kingdom'
-            },
-            'audio/hozier-in-the-woods-somewhere.mp3': {
-                artist: 'Hozier',
-                title: 'In The Woods Somewhere'
-            },
-            'audio/bloc-party-the-pioneers-m83-remix.mp3': {
-                artist: 'Bloc Party',
-                title: 'The Pioneers (M83 Remix)'
-            },
-            'audio/peter-gabriel-my-body-is-a-cage.mp3': {
-                artist: 'Peter Gabriel',
-                title: 'My Body Is A Cage'
-            },
-            'audio/raury-god-s-whisper.mp3': {
-                artist: 'Raury',
-                title: 'God\'s Whisper'
-            },
-            'audio/ry-x-thunder.mp3': {
-                artist: 'RY X',
-                title: 'Thunder'
-            }
+            // 'audio/apparat-goodbye.mp3': {
+            //     artist: 'Apparat',
+            //     title: 'Goodbye'
+            // },
+            // 'audio/teho-teardo-blixa-bargeld-a-quiet-life.mp3': {
+            //     artist: 'Teho Teardo & Blixa Bargeld',
+            //     title: 'A Quiet Life'
+            // },
+            // 'audio/fever-ray-keep-the-streets-empty-for-me.mp3': {
+            //     artist: 'Fever Ray',
+            //     title: 'Keep the Streets Empty for Me'
+            // },
+            // 'audio/apparat-joel.mp3': {
+            //     artist: 'Apparat',
+            //     title: 'Joel'
+            // },
+            // 'audio/agnes-obel-familiar.mp3': {
+            //     artist: 'Agnes Obel',
+            //     title: 'Familiar'
+            // },
+            // 'audio/chris-avantgarde-feat-red-rosamond-inside.mp3': {
+            //     artist: 'Chris Avantgarde feat. Red Rosamond',
+            //     title: 'Inside'
+            // },
+            // 'audio/may-the-muse-bad-kingdom.mp3': {
+            //     artist: 'May The Muse and Robot Koch',
+            //     title: 'Bad Kingdom'
+            // },
+            // 'audio/hozier-in-the-woods-somewhere.mp3': {
+            //     artist: 'Hozier',
+            //     title: 'In The Woods Somewhere'
+            // },
+            // 'audio/bloc-party-the-pioneers-m83-remix.mp3': {
+            //     artist: 'Bloc Party',
+            //     title: 'The Pioneers (M83 Remix)'
+            // },
+            // 'audio/peter-gabriel-my-body-is-a-cage.mp3': {
+            //     artist: 'Peter Gabriel',
+            //     title: 'My Body Is A Cage'
+            // },
+            // 'audio/raury-god-s-whisper.mp3': {
+            //     artist: 'Raury',
+            //     title: 'God\'s Whisper'
+            // },
+            // 'audio/ry-x-thunder.mp3': {
+            //     artist: 'RY X',
+            //     title: 'Thunder'
+            // }
         } 
     },
     seekAudio: function(cmd) {
@@ -182,6 +183,10 @@ let app = {
     runOnceWindowLoaded: function() {
         document.body.style.opacity = 1;
         document.body.addEventListener('click', app.effectClick, {passive: true});
+        // console.log()
+        if (Object.keys(app.defaults.songs).length == 0) {
+            app.defaults.el_player.remove();
+        }
     },
     update: function() {
         window.app_audio_player_paused = true;

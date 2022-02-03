@@ -1,5 +1,6 @@
 const story = {
     scenes: {
+        'jaws_dolly_zoom': { layout: 'second' },
         'harry_potter_hogwarts_dementors_a': { layout: 'second' },
         'hp_clock_clouds': { layout: 'second' },
         'hp_dementor_opening_door': { layout: 'second' },

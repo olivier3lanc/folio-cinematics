@@ -1,0 +1,6 @@
+---
+---
+[
+{% for i in (1..55) %}{ "url": "/cinematics-resources/jaws_dolly_zoom/jaws_dolly_zoom_{{i}}.webp" }{% if forloop.last == false %},{% endif %}
+{% endfor %}
+]

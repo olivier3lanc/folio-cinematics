@@ -184,11 +184,17 @@ let app = {
         document.body.style.opacity = 1;
         document.body.addEventListener('click', app.effectClick, {passive: true});
         // console.log()
-        if (Object.keys(app.defaults.songs).length == 0) {
+        if (Object.keys(app.defaults.songs).length == 0 && app.defaults.el_player !== null && app.defaults.el_player !== undefined) {
             app.defaults.el_player.remove();
         }
     },
     update: function() {
+        // If scene in get parameters
+        const gets = new URLSearchParams(location.search);
+        const scene_current_id = gets.get('scene');
+        if (scene_current_id !== null && app.defaults.el_scenes !== null) {
+            app.defaults.el_scenes.setAttribute('src', 'scene.html?scene='+scene_current_id);
+        }
         window.app_audio_player_paused = true;
         window.addEventListener('load', app.runOnceWindowLoaded);
     }

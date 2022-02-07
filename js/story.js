@@ -226,7 +226,7 @@ const story = {
             return `
                 <link rel="stylesheet" href="css/${id}.css">
                 <div class="c-position m-relative">
-                    <div id="${id}" class="u-minh-100vh u-minw-100vw"></div>
+                    <div id="${id}" class="u-w-100"></div>
                     <div class="c-position m-fixed m-top-0 u-w-100 u-h-100vh u-pe-none u-bg-stripes"></div>
                 </div>
             `

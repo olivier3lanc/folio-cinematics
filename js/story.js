@@ -141,14 +141,9 @@ const story = {
             return markup;
         },
         fourth: function(data) {
-            let markup = story.includes.css_video_frames('matter-j');
-            var xhr = new XMLHttpRequest();
-            xhr.onload = function() {
-                story.elements.main.innerHTML = markup + this.responseXML.body.innerHTML;
-            }
-            xhr.open("GET", "about.html");
-            xhr.responseType = "document";
-            xhr.send();
+            let markup = story.includes.scroll_frames('json/'+data.scene_current_id+'.json');
+            markup += story.includes.onboarding_scroll();
+            return markup;
         }
     },
     includes: {
@@ -193,18 +188,14 @@ const story = {
         },
         onboarding_scroll: function() {
             return `
-                <div class="c-position m-fixed m-middle-center m-anchor-top-center c-grid m-nowrap m-center u-ta-center u-mt-xl"
-                    scroll-btween="app_scene_onboarding_mouse"
-                    scroll-btween-detector="app_scene_detector" 
-                    data-opacity="|0:1 to 15:0 to 100:0|"
-                    u-mt-md="sm">
-                    <div class="c-spacing m-w-6 u-p-xxs">
-                        <span class="c-shape m-mouse u-fs-xl" u-fs-lg="sm"></span> 
-                        <p class="u-fs-xs u-m-none u-ff-lead u-c-primary-max u-lh-1">Scroll down</p>
+                <div class="c-position m-fixed m-bottom-center m-anchor-bottom-center c-grid m-nowrap m-center u-ta-center u-pb-md">
+                    <div class="c-spacing m-w-6 c-grid m-column m-middle">
+                        <span class="c-shape m-mouse u-fs-xl u-mb-xs" u-fs-lg="sm"></span> 
+                        <p class="u-fs-xs u-m-none u-ff-lead u-c-primary-max u-lh-1" u-fs-xxs="sm">Scroll down and up</p>
                     </div>
-                    <div class="c-spacing m-w-6 u-p-xxs u-orient-portrait" u-none="md,xl">
-                        <span class="c-shape m-orientation-landscape u-fs-xl" u-fs-lg="sm"></span> 
-                        <p class="u-fs-xs u-m-none u-ff-lead u-c-primary-max u-lh-1">Landscape orientation recommended</p>
+                    <div class="c-spacing m-w-6 c-grid m-column m-middle u-orient-portrait" u-none="md,xl">
+                        <span class="c-shape m-orientation-landscape u-fs-xl u-mb-xs" u-fs-lg="sm"></span> 
+                        <p class="u-fs-xs u-m-none u-ff-lead u-c-primary-max u-lh-1" u-fs-xxs="sm">Landscape orientation recommended</p>
                     </div>
                 </div>
             `
@@ -247,19 +238,20 @@ const story = {
     update: function() {
         const gets = new URLSearchParams(location.search);
         let scene_current_id = gets.get('scene');
+        let layout_override = gets.get('layout');
         console.log(scene_current_id);
         // Build the scene content
         if (scene_current_id === null) {
             scene_current_id = Object.keys(story.scenes)[0];
         }
-        const scene = {
+        let scene = {
             scene_current_id: scene_current_id,
-            scene_layout: story.scenes[scene_current_id].layout,
+            scene_layout: layout_override || story.scenes[scene_current_id].layout,
             scene_data: story.scenes[scene_current_id].data
         };
         console.log(scene);
         // Insert HTML
-        const markup = this.layouts[scene.scene_layout](scene);
+        let markup = this.layouts[scene.scene_layout](scene);
         this.elements.main.innerHTML = markup;
         if (this.elements.loader !== null) {
             // Scene loaded

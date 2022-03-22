@@ -1,9 +1,12 @@
-let scrollFrames = {
+const scrollFrames = {
     defaults: {
-        backgroundSize: 'cover', // String, CSS value of 'background-size' property
-        enabled: true // boolean - Sets the status of animation interval
+        style: {
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'contain',
+            backgroundPosition: 'center'
+        }
     },
-    // Scroll line
+    // Intersection
     // @el - object - The DOM object to detect
     // Returns float between 0 and 1
     // value == 0 means the element is not visible yet
@@ -11,11 +14,11 @@ let scrollFrames = {
     // 0 means the element starts into the viewport
     // 1 means the element has just finished to run through the viewport
     // value == 1 means the element has past the viewport is not visible anymore
-    getScrollLine: function(el) {
+    getIntersection: function(el) {
         let response = -1;
         if (typeof el == 'object') {
-            const detector_id = el.getAttribute('scroll-frames-detector');
-            if (detector_id !== null) {
+            const detector_id = el.dataset.detector;
+            if (detector_id !== undefined) {
                 const el_detector = document.getElementById(detector_id);
                 if (el_detector !== null) {
                     el = el_detector;
@@ -31,12 +34,12 @@ let scrollFrames = {
             }
         }
         // Limits between 0 and 1
-        // if (response > 1) {
-        //     response = 1;
-        // }
-        // if (response < 0) {
-        //     response = 0;
-        // }
+        if (response > 1) {
+            response = 1;
+        }
+        if (response < 0) {
+            response = 0;
+        }
         return response;
     },
     anims: {},
@@ -48,213 +51,188 @@ let scrollFrames = {
             elems_anims.forEach(function(el_anim) {
                 // Get the anim ID
                 const anim_id = el_anim.getAttribute('scroll-frames');
+                // Get the URL mask
+                const anim_url_mask = el_anim.dataset.urlMask;
                 // Get the JSON URL
                 const anim_json_url = el_anim.dataset.json;
-                // Get the anim timeline
-                let anim_timeline = el_anim.dataset.timeline;
-                // Set default timeline if unset
-                if (anim_timeline === undefined) {
-                    anim_timeline = '0:0 to 100:100';
+                // Get the anim keyframes
+                let anim_keyframes = el_anim.dataset.keyframes;
+                // Set default keyframes if unset
+                if (anim_keyframes === undefined) {
+                    anim_keyframes = '0:0 to 100:100';
                 }
-                // Test if valid JSON URL
-                if (anim_json_url.indexOf('.json') == anim_json_url.length - 5) {
-                    // Check id validity
-                    if (anim_id.length > 0 && anim_id !== undefined) {
-                        // Init instance before fetch
-                        scrollFrames.anims[anim_id] = {
-                            enabled: false,
-                            transfer: false,
-                            backgroundImage: '',
-                            backgroundSizes: [],
-                            init: false
-                        }
-                        // Let's fetch
-                        fetch(anim_json_url).then(function(response) {
-                            const contentType = response.headers.get("content-type");
-                            if(contentType && contentType.indexOf("application/json") !== -1) {
-                                return response.json().then(function(json) {
-                                    // Background image string and background size object
-                                    let backgroundImage = '';
-                                    let backgroundSizes = [];
-                                    // console.log(json);
-                                    json.forEach(function(data, index) {
-                                        backgroundImage += 'url('+data.url+')';
-                                        if (index < json.length - 1) {
-                                            backgroundImage += ',';
-                                        }
-                                        let backgroundSize = '';
-                                        json.forEach(function(bsData, bsIndex) {
-                                            if (bsIndex == index) {
-                                                backgroundSize += scrollFrames.defaults.backgroundSize;
-                                            } else {
-                                                backgroundSize += '0%';
-                                            }
-                                            if (bsIndex < json.length - 1) {
-                                                backgroundSize += ',';
-                                            }
-                                        });
-                                        backgroundSizes.push(backgroundSize);
-                                    });
-                                    // Write the CSS multiple background-image property for this anim
-                                    scrollFrames['anims'][anim_id]['backgroundImage'] = backgroundImage;
-                                    // Write the CSS multiple background-size property for this anim
-                                    scrollFrames['anims'][anim_id]['backgroundSizes'] = backgroundSizes;
-                                    // Build the transfer function from timeline
-                                    scrollFrames['anims'][anim_id]['transfer'] = function(scroll_line) {
-                                        let response = 0;
-                                        if (typeof scroll_line == 'number') {
-                                            // Keypoints
-                                            if (anim_timeline.indexOf(':') > 0) {
-                                                // example: 0:0 to 70:0 to 100:100
-                                                // console.log(anim_id);
-                                                const fromToArray = anim_timeline.split(' to ');
-                                                let xa = 0;
-                                                let ya = fromToArray[0].split(':')[1];
-                                                let xb = 1;
-                                                let yb = 1;
-                                                // console.log(fromToArray);
-                                                fromToArray.forEach(function(keypoint, keyPointIndex) {
-                                                    // If not last
-                                                    if (keyPointIndex < fromToArray.length - 1) {
-                                                        const positionCurrent = parseFloat(keypoint.split(':')[0]) / 100;
-                                                        const positionNext = parseFloat(fromToArray[keyPointIndex + 1].split(':')[0]) / 100;
-                                                        
-                                                        if (scroll_line >= positionCurrent && scroll_line <= positionNext) {
-                                                            // console.log(positionCurrent, scroll_line, positionNext);
-                                                            xa = positionCurrent;
-                                                            ya = parseFloat(keypoint.split(':')[1]);
-                                                            xb = positionNext;
-                                                            yb = parseFloat(fromToArray[keyPointIndex + 1].split(':')[1]);
-                                                        }
-                                                    }
-                                                });
-                                                const coef = (yb - ya) / (xb - xa);
-                                                const y0 = yb - coef * xb;
-                                                response = (coef * scroll_line + y0) / 100;
-                                                // console.log(anim_id, response);
-                                                // console.log('scroll_line:'+scroll_line, 'yb:'+yb, 'ya:'+ya, 'xb:'+xb, 'xa:'+xa, 'response:'+response);
-                                            }
-                                        }
-                                        return response;
-                                    }
-                                    // Write it is OK enabled to be used
-                                    scrollFrames['anims'][anim_id]['enabled'] = scrollFrames.defaults.enabled;
-                                    // Write the DOM element
-                                    scrollFrames['anims'][anim_id]['el'] = el_anim;
-                                    // If optional detector is set
-                                    if (scrollFrames['anims'][anim_id]['el'] !== null) {
-                                        const optional_detector_id = scrollFrames['anims'][anim_id]['el'].getAttribute('scroll-frames-detector');
-                                        const el_detector = document.getElementById(optional_detector_id);
-                                        if (el_detector !== null) {
-                                            scrollFrames['anims'][anim_id]['el_detector'] = el_detector;
-                                        }
-                                    }
-                                    
-                                    // Apply the background-image property on element
-                                    // Comment for lazy loading
-                                    el_anim.style.backgroundImage = scrollFrames['anims'][anim_id]['backgroundImage'];
-                                    // Start 
-                                    scrollFrames.frame();
-                                    // Apply listener
-                                    window.addEventListener('scroll', scrollFrames.frame);
+                
+                // Check id validity
+                if (anim_id.length > 0 && anim_id !== undefined) {
+                    // Init instance before fetch
+                    scrollFrames.anims[anim_id] = {
+                        ready: false,
+                        transfer: false,
+                        backgroundImage: '',
+                        backgroundSizes: []
+                    }
+                    // Mask
+                    if (anim_url_mask !== undefined && anim_json_url === undefined) {
+                        const anim_mask_array = anim_url_mask.split('|');
+                        if (anim_mask_array.length == 3) {
+                            const anim_mask_interval = anim_mask_array[1].split(' to ');
+                            const anim_mask_i_start = parseInt(anim_mask_interval[0]);
+                            const anim_mask_i_end = parseInt(anim_mask_interval[1]);
+                            let json_from_mask = [];
+                            // console.log(anim_mask_i_start,anim_mask_i_end);
+                            for (let frame_index = anim_mask_i_start; frame_index <= anim_mask_i_end; frame_index++) {
+                                json_from_mask.push({
+                                    url: anim_mask_array[0] + frame_index + anim_mask_array[2]
                                 });
-                            } else {
-                                console.log(anim_json_url+" is not a valid JSON URL!");
                             }
-                        });
+                            // console.log(json_from_mask)
+                            scrollFrames.build(json_from_mask, el_anim, anim_id, anim_keyframes);
+                        }
+                    }
+                    // Test if valid JSON URL
+                    if (anim_json_url !== undefined && anim_url_mask === undefined) {
+                        if (anim_json_url.indexOf('.json') == anim_json_url.length - 5) {
+                            // Let's fetch
+                            fetch(anim_json_url).then(function(response) {
+                                const contentType = response.headers.get("content-type");
+                                if(contentType && contentType.indexOf("application/json") !== -1) {
+                                    return response.json().then(function(json) {
+                                        scrollFrames.build(json, el_anim, anim_id, anim_keyframes);
+                                    });
+                                } else {
+                                    console.log(anim_json_url+" is not a valid JSON URL!");
+                                }
+                            });
+                        }
                     }
                 }
             });
         }
     },
+    build: function(json, el_anim, anim_id, anim_keyframes) {
+        // Background image string and background size object
+        let backgroundImage = '';
+        let backgroundSizes = [];
+        console.log(json);
+        json.forEach(function(data, index) {
+            backgroundImage += 'url('+data.url+')';
+            if (index < json.length - 1) {
+                backgroundImage += ',';
+            }
+            let backgroundSize = '';
+            // Set background size value from this element or use default
+            let backgroundSizeProperty = scrollFrames.defaults.style.backgroundSize;
+            if (el_anim.dataset.backgroundSize !== undefined) {
+                backgroundSizeProperty = el_anim.dataset.backgroundSize;
+            }
+            json.forEach(function(bsData, bsIndex) {
+                if (bsIndex == index) {
+                    backgroundSize += backgroundSizeProperty;
+                } else {
+                    backgroundSize += '0%';
+                }
+                if (bsIndex < json.length - 1) {
+                    backgroundSize += ',';
+                }
+            });
+            backgroundSizes.push(backgroundSize);
+        });
+        // Write the CSS multiple background-image property for this anim
+        scrollFrames['anims'][anim_id]['backgroundImage'] = backgroundImage;
+        // Write the CSS multiple background-size property for this anim
+        scrollFrames['anims'][anim_id]['backgroundSizes'] = backgroundSizes;
+        // Build the transfer function from keyframes
+        scrollFrames['anims'][anim_id]['transfer'] = function(scroll_line) {
+            let response = 0;
+            if (typeof scroll_line == 'number') {
+                // Keypoints
+                if (anim_keyframes.indexOf(':') > 0) {
+                    // example: 0:0 to 70:0 to 100:100
+                    // console.log(anim_id);
+                    const fromToArray = anim_keyframes.split(' to ');
+                    let xa = 0;
+                    let ya = fromToArray[0].split(':')[1];
+                    let xb = 1;
+                    let yb = 1;
+                    // console.log(fromToArray);
+                    fromToArray.forEach(function(keypoint, keyPointIndex) {
+                        // If not last
+                        if (keyPointIndex < fromToArray.length - 1) {
+                            const positionCurrent = parseFloat(keypoint.split(':')[0]) / 100;
+                            const positionNext = parseFloat(fromToArray[keyPointIndex + 1].split(':')[0]) / 100;
+                            
+                            if (scroll_line >= positionCurrent && scroll_line <= positionNext) {
+                                // console.log(positionCurrent, scroll_line, positionNext);
+                                xa = positionCurrent;
+                                ya = parseFloat(keypoint.split(':')[1]);
+                                xb = positionNext;
+                                yb = parseFloat(fromToArray[keyPointIndex + 1].split(':')[1]);
+                            }
+                        }
+                    });
+                    const coef = (yb - ya) / (xb - xa);
+                    const y0 = yb - coef * xb;
+                    response = (coef * scroll_line + y0) / 100;
+                    // console.log(anim_id, response);
+                    // console.log('scroll_line:'+scroll_line, 'yb:'+yb, 'ya:'+ya, 'xb:'+xb, 'xa:'+xa, 'response:'+response);
+                }
+            }
+            return response;
+        }
+        // Write it is OK ready to be used
+        scrollFrames['anims'][anim_id]['ready'] = true;
+        // Write the DOM element
+        scrollFrames['anims'][anim_id]['el'] = document.querySelector('[scroll-frames="'+anim_id+'"]');
+        // If optional detector is set
+        if (scrollFrames['anims'][anim_id]['el'] !== null) {
+            const optional_detector_id = scrollFrames['anims'][anim_id]['el'].dataset.detector;
+            if (optional_detector_id !== undefined) {
+                const el_detector = document.getElementById(optional_detector_id);
+                if (el_detector !== null) {
+                    scrollFrames['anims'][anim_id]['el_detector'] = el_detector;
+                }
+            }
+        }
+
+        // Apply the background-image property on element
+        el_anim.style.backgroundImage = scrollFrames['anims'][anim_id]['backgroundImage'];
+        // Apply other style properties
+        Object.keys(scrollFrames.defaults.style).forEach(function(property) {
+            // If CSS property is set through dataset on el_anim, use it 
+            if (el_anim.dataset[property] !== undefined) {
+                el_anim.style[property]  = el_anim.dataset[property];
+            }
+            // Otherwise use default
+            else {
+                el_anim.style[property]  = scrollFrames.defaults.style[property];
+            }
+        });
+        // Start 
+        scrollFrames.frame();
+        // Apply listener
+        window.addEventListener('scroll', scrollFrames.raf);
+    },
+    raf: function() {
+        window.requestAnimationFrame(scrollFrames.frame);
+    },
     frame: function() {
         // Scan all anims ids
         Object.keys(scrollFrames.anims).forEach(function(anim_id, anim_index) {
-            // Anim must exist
-            if (scrollFrames['anims'][anim_id] !== null) {
-                // If current anim is enabled
-                if (scrollFrames['anims'][anim_id]['enabled'] && scrollFrames['anims'][anim_id]['el'] !== null) {
-                    let current_scroll_line = 0;
-                    if (scrollFrames['anims'][anim_id]['el_detector'] !== null && scrollFrames['anims'][anim_id]['el_detector'] !== undefined) {
-                        current_scroll_line = scrollFrames.getScrollLine(scrollFrames['anims'][anim_id]['el_detector']);
-                    } else {
-                        current_scroll_line = scrollFrames.getScrollLine(scrollFrames['anims'][anim_id]['el']);
-                    }
-                    // Uncomment for lazy loading
-                    // if (current_scroll_line >= -2 && current_scroll_line <= 1) {
-                    //     if (!scrollFrames['anims'][anim_id]['init']) {
-                    //         scrollFrames['anims'][anim_id]['el']['style']['background-image']  = scrollFrames['anims'][anim_id]['backgroundImage'];
-                    //         scrollFrames['anims'][anim_id]['init'] = true;
-                    //     }
-                    // }
-                    let frameIndex = scrollFrames['anims'][anim_id]['transfer'](current_scroll_line);
-                    if (current_scroll_line < 0) {
-                        frameIndex = 0;
-                    }
-                    if (current_scroll_line > 1) {
-                        frameIndex = 1;
-                    }
-                    const index = Math.round(frameIndex * (scrollFrames['anims'][anim_id]['backgroundSizes'].length - 1));
-                    // console.log(anim_id, current_scroll_line, frameIndex);
-                    // Apply proper background-size property
-                    scrollFrames['anims'][anim_id]['el']['style']['background-size'] = scrollFrames['anims'][anim_id]['backgroundSizes'][index];
+            // If current anim is ready
+            if (scrollFrames['anims'][anim_id]['ready'] && scrollFrames['anims'][anim_id]['el'] !== null) {
+                let current_scroll_line = 0;
+                if (scrollFrames['anims'][anim_id]['el_detector'] !== null && scrollFrames['anims'][anim_id]['el_detector'] !== undefined) {
+                    current_scroll_line = scrollFrames.getIntersection(scrollFrames['anims'][anim_id]['el_detector']);
+                } else {
+                    current_scroll_line = scrollFrames.getIntersection(scrollFrames['anims'][anim_id]['el']);
                 }
+                const frameIndex = scrollFrames['anims'][anim_id]['transfer'](current_scroll_line);
+                const index = Math.round(frameIndex * (scrollFrames['anims'][anim_id]['backgroundSizes'].length - 1));
+                // console.log(anim_id, current_scroll_line, frameIndex);
+                // Apply proper background-size property
+                scrollFrames['anims'][anim_id]['el']['style']['background-size'] = scrollFrames['anims'][anim_id]['backgroundSizes'][index];
             }
         });
-    },
-    // Start animation on scroll
-    // @id - string - Optional - id of the anim
-    //      If @id is set, starts the specified anim
-    //      If no @id is set, starts all anims
-    start: function(id) {
-        if (typeof id == 'string') {
-            if (scrollFrames.anims[id] !== undefined) {
-                scrollFrames.anims[id]['enabled'] = true;
-            }
-        }
-        if (id === undefined) {
-            for (const anim_id in scrollFrames.anims) {
-                if (Object.hasOwnProperty.call(scrollFrames.anims, anim_id)) {
-                    scrollFrames.anims[anim_id]['enabled'] = true;
-                }
-            }
-        }
-    },
-    // Stop / Pause animation on scroll
-    // @id - string - Optional - id of the anim
-    //      If @id is set, stops the specified anim
-    //      If no @id is set, stops all anims
-    stop: function(id) {
-        if (typeof id == 'string') {
-            if (scrollFrames.anims[id] !== undefined) {
-                scrollFrames.anims[id]['enabled'] = false;
-            }
-        }
-        if (id === undefined) {
-            for (const anim_id in scrollFrames.anims) {
-                if (Object.hasOwnProperty.call(scrollFrames.anims, anim_id)) {
-                    scrollFrames.anims[anim_id]['enabled'] = false;
-                }
-            }
-        }
-    },
-    // Destroy 
-    // @id - string - Optional - id of the anim to destroy
-    //      If @id is set, destroys the specified anim
-    //      If no @id is set, destroys all anims
-    destroy: function(id) {
-        if (typeof id == 'string') {
-            if (scrollFrames.anims[id] !== undefined) {
-                scrollFrames.anims[id] = null;
-            }
-        }
-        if (id === undefined) {
-            for (const anim_id in scrollFrames.anims) {
-                if (Object.hasOwnProperty.call(scrollFrames.anims, anim_id)) {
-                    scrollFrames.anims[anim_id] = null;
-                }
-            }
-        }
     }
 }
 scrollFrames.update();
@@ -336,8 +314,8 @@ scrollFrames.update();
 // let xobj = new XMLHttpRequest();
 //     xobj.overrideMimeType("application/json");
 // xobj.open('GET', '../js/fakedata/frames.json', true); // Replace 'my_data' with the path to your file
-// xobj.onenabledstatechange = function () {
-//     if (xobj.enabledState == 4 && xobj.status == "200") {
+// xobj.onreadystatechange = function () {
+//     if (xobj.readyState == 4 && xobj.status == "200") {
 //         // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
         
 //     }

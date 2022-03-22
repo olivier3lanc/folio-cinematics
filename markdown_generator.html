@@ -10,45 +10,45 @@ scenes:
     -   id: blockhaus_b
         amount: 99
     -   id: casa_credit_albamiguel
-        amount: 75
+        amount: 74
     -   id: casa_credit_alex
-        amount: 80
+        amount: 79
     -   id: casa_credit_alvaro
-        amount: 59
+        amount: 58
     -   id: casa_credit_beretta
-        amount: 60
+        amount: 59
     -   id: casa_credit_cristina
-        amount: 60
+        amount: 59
     -   id: casa_credit_esther
-        amount: 57
+        amount: 56
     -   id: casa_credit_executives
-        amount: 25
+        amount: 24
     -   id: casa_credit_final
-        amount: 181
+        amount: 180
     -   id: casa_credit_itziar
-        amount: 78
+        amount: 77
     -   id: casa_credit_migue
-        amount: 60
+        amount: 59
     -   id: casa_credit_pacopedro
-        amount: 100
+        amount: 99
     -   id: casa_credit_ursula
-        amount: 55
+        amount: 54
     -   id: casa_credit_ykiti
-        amount: 39
+        amount: 38
     -   id: casa_rio_1
-        amount: 89
+        amount: 88
     -   id: casa_rio_2
-        amount: 42
+        amount: 41
     -   id: casa_rio_3
-        amount: 39
+        amount: 38
     -   id: casa_rio_4
-        amount: 202
+        amount: 201
     -   id: casa_tokyo_1
-        amount: 32
+        amount: 31
     -   id: casa_tokyo_2
-        amount: 37
+        amount: 36
     -   id: casa_tokyo_3
-        amount: 35
+        amount: 34
     -   id: casa_tokyo_4
         amount: 81
     -   id: centrale_a
@@ -395,5 +395,6 @@ scenes:
         amount: 88
 ---
 {% for scene in page.scenes %}
-    [![{{scene.id}}](https://images.weserv.nl/?url=https://olivier3lanc.github.io/cinematics-resources/{{scene.id}}/{{scene.id}}_1.webp&output=webp&w=1400&q=30)](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene={{scene.id}}&amount={{scene.amount}})
+[{{scene.id}} | {{scene.amount}} frames](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene={{scene.id}}&amount={{scene.amount}})
+[![{{scene.id}}](https://images.weserv.nl/?url=https://olivier3lanc.github.io/cinematics-resources/{{scene.id}}/{{scene.id}}_1.webp&output=webp&w=1400&q=30)](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene={{scene.id}}&amount={{scene.amount}})
 {% endfor %}

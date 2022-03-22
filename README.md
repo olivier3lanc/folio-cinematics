@@ -557,8 +557,8 @@
 [hp_slughorn_stealing | 97 frames](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_slughorn_stealing&amount=97)
 [![hp_slughorn_stealing](https://images.weserv.nl/?url=https://olivier3lanc.github.io/cinematics-resources/hp_slughorn_stealing/hp_slughorn_stealing_1.webp&output=webp&w=1400&q=30)](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_slughorn_stealing&amount=97)
 
-[hp_stained_glass | 0 frames](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_stained_glass&amount=0)
-[![hp_stained_glass](https://images.weserv.nl/?url=https://olivier3lanc.github.io/cinematics-resources/hp_stained_glass/hp_stained_glass_1.webp&output=webp&w=1400&q=30)](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_stained_glass&amount=0)
+[hp_stained_glass | 59 frames](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_stained_glass&amount=59)
+[![hp_stained_glass](https://images.weserv.nl/?url=https://olivier3lanc.github.io/cinematics-resources/hp_stained_glass/hp_stained_glass_1.webp&output=webp&w=1400&q=30)](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_stained_glass&amount=59)
 
 [hp_students_on_boats | 148 frames](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_students_on_boats&amount=148)
 [![hp_students_on_boats](https://images.weserv.nl/?url=https://olivier3lanc.github.io/cinematics-resources/hp_students_on_boats/hp_students_on_boats_1.webp&output=webp&w=1400&q=30)](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=hp_students_on_boats&amount=148)

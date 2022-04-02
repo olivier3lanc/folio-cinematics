@@ -1,3 +1,9 @@
+## Breaking Bad
+
+[Copyright Breaking Bad](https://www.netflix.com/fr/title/70143836) 
+
+bb_opening | 170 frames
+[![bb_opening](https://images.weserv.nl/?url=https://olivier3lanc.github.io/cinematics-resources/bb_opening/bb_opening_1.webp&output=webp&w=1400&q=30)](https://olivier3lanc.github.io/folio-cinematics/scene.html?scene=bb_opening&amount=170)
 
 ## D A R K
 [Copyright D A R K](https://www.netflix.com/fr/title/80100172) 
